@@ -188,8 +188,8 @@ namespace T5ProgressAutogen
                             Console.WriteLine("Y U DO DIS!: {0}", trimmedLine);
                             continue;
                         }
-                        //Console.WriteLine("{0}\t+\t{1}\t// {2}", argsData[0], argsData[1], currentCPPFile.Substring(sourceDir.Length).TrimStart(Path.DirectorySeparatorChar).Replace('\\', '/'));
-                        var progData = new ProgressData(argsData[0], ProgressStatus.Injected, argsData[1], SanitizeFileName(currentCPPFile, sourceDir));
+                        ProgressStatus isInjected = argsData[2] == "replace" ? ProgressStatus.Injected : ProgressStatus.NotInjected;
+                        var progData = new ProgressData(argsData[0], isInjected, argsData[1], SanitizeFileName(currentCPPFile, sourceDir));
                         codeProgressData.Add(progData);
                     }
                 }
