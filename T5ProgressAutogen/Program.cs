@@ -41,7 +41,7 @@ namespace T5ProgressAutogen
             var matchingMultiple = new List<ProgressData>();
             var wrongNameSomewhere = new List<ProgressData>();
             var wrongFileSomewhere = new List<ProgressData>();
-            var updatedStatus = 0;
+            var updatedStatus = new List<ProgressData>();
             foreach (var codePD in codeProgressData)
             {
                 var matchedPDs = testUpdateNoNewStuff.Where(x => x.Address == codePD.Address);
@@ -92,10 +92,23 @@ namespace T5ProgressAutogen
                 {
                     notProcessedCodePDs.Remove(codePD);
                     // Don't mess with funcs marked as NotInjected, code parser doesn't tell us
+                    // about commented inject lines and functions :(
                     if (match.Status != ProgressStatus.NotInjected)
                     {
-                        updatedStatus++;
+                        Console.WriteLine("Updating status:");
+                        Console.WriteLine("Code: {0}", GetProgressString(codePD, true));
+                        Console.WriteLine("Prog: {0}", GetProgressString(match, true));
+                        Console.WriteLine();
+                        updatedStatus.Add(codePD);
                         match.Status = codePD.Status;
+                    }
+                    else
+                    {
+
+                        Console.WriteLine("Status mismatch, can't update:");
+                        Console.WriteLine("Code: {0}", GetProgressString(codePD, true));
+                        Console.WriteLine("Prog: {0}", GetProgressString(match, true));
+                        Console.WriteLine();
                     }
                     continue;
                 }
@@ -142,7 +155,7 @@ namespace T5ProgressAutogen
             Console.WriteLine("{0} code functions matched multiple by address. Can't update that.", matchingMultiple.Count());
             Console.WriteLine("{0} code functions have the wrong name somewhere. Can't update that either.", wrongNameSomewhere.Count());
             Console.WriteLine("{0} code functions have been added to a different file than what progress claims. Can't update that.", wrongFileSomewhere.Count());
-            Console.WriteLine("{0} functions have had their status updated. YAY!", updatedStatus);
+            Console.WriteLine("{0} functions have had their status updated. YAY!", updatedStatus.Count());
             Console.WriteLine("{0} claim to be injected, actually {1} are injected in code.", claimsToBeInjected.Count(), areInjected.Count());
             Console.WriteLine("{0} functions claim to be injected but they aren't.", notActuallyInjected.Count());
 
