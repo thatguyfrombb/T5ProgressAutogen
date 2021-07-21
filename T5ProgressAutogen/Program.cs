@@ -166,7 +166,8 @@ namespace T5ProgressAutogen
                         // We've got something decompiled. Need parsing!
                         //Console.WriteLine(trimmedLine);
                         var hexIdx = trimmedLine.IndexOf("0x", StringComparison.OrdinalIgnoreCase);
-                        var argsText = trimmedLine.Substring(hexIdx).TrimEnd(')', ';', ' ', '\t').Trim();
+                        var endIdx = trimmedLine.IndexOf(");", hexIdx);
+                        var argsText = trimmedLine.Substring(hexIdx, endIdx - hexIdx).TrimEnd(')', ';', ' ', '\t').Trim();
                         var argsData = argsText.Split(',', StringSplitOptions.TrimEntries);
                         if (argsData.Length != 3)
                         {
