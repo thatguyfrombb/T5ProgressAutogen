@@ -326,12 +326,14 @@ namespace T5ProgressAutogen
                     if (trimmedLine.Contains("\t\t") || trimmedLine.Contains("\t+\t") || trimmedLine.Contains("\tx\t", StringComparison.OrdinalIgnoreCase))
                     {
                         // We got one!
-                        var progDataText = trimmedLine.Trim().Split('\t');
-                        var progData = new ProgressData(progDataText[0], ProgressStatus.NotDecompiled, progDataText[progDataText.Length - 1], currentSourceFile);
-                        if (progDataText.Length > 2)
+                        var progDataText = trimmedLine.Trim().Split('\t', StringSplitOptions.TrimEntries);
+                        if (progDataText.Length < 3)
                         {
-                            progData.Status.FromProgress(progDataText[1]);
+                            Console.WriteLine("GOT BAD LINE: {0}", trimmedLine);
+                            continue;
                         }
+                        var progData = new ProgressData(progDataText[0], ProgressStatus.NotDecompiled, progDataText[2], currentSourceFile);
+                        progData.Status.FromProgress(progDataText[1]);
                         if (inAutoGen)
                         {
                             fileAutoPD.Add(progData);
