@@ -330,6 +330,7 @@ namespace T5ProgressAutogen
                         if (progDataText.Length < 3)
                         {
                             Console.WriteLine("GOT BAD LINE: {0}", trimmedLine);
+                            Console.WriteLine();
                             continue;
                         }
                         var progData = new ProgressData(progDataText[0], ProgressStatus.NotDecompiled, progDataText[2], currentSourceFile);
