@@ -124,6 +124,8 @@ namespace T5ProgressAutogen
 
             var claimsToBeInjected = testUpdateNoNewStuff.Where(x => x.Status == ProgressStatus.Injected).ToList();
             var areInjected = codeProgressData.Where(x => x.Status == ProgressStatus.Injected).ToList();
+            // This is used to re-add the functions considered injected because they were originally inlined.
+            areInjected.AddRange(claimsToBeInjected.Where(x => x.Address == "##########").ToList());
             var notActuallyInjected = new List<ProgressData>();
             var autoListInjected = autoList.Where(x => x.Status == ProgressStatus.Injected).ToList();
             foreach (var filePD in claimsToBeInjected)
@@ -189,6 +191,8 @@ namespace T5ProgressAutogen
                             continue;
                         }
                         ProgressStatus isInjected = argsData[2] == "replace" ? ProgressStatus.Injected : ProgressStatus.NotInjected;
+                        if (isInjected == ProgressStatus.NotInjected)
+                            Console.WriteLine("Got NotInjected. Why?!");
                         var progData = new ProgressData(argsData[0], isInjected, argsData[1], SanitizeFileName(currentCPPFile, sourceDir));
                         codeProgressData.Add(progData);
                     }
